@@ -12,6 +12,24 @@ import requests
 
 ROOT = Path(__file__).resolve().parent
 STOCK_FILE = ROOT / "data" / "stocks.csv"
+STATE_FILE = ROOT / "state.json"
+
+
+def load_state() -> dict[str, Any]:
+    if not STATE_FILE.exists():
+        return {"last_ticker": None}
+
+    try:
+        with STATE_FILE.open("r", encoding="utf-8") as handle:
+            return json.load(handle)
+    except (json.JSONDecodeError, OSError):
+        return {"last_ticker": None}
+
+
+def save_state(state: dict[str, Any]) -> None:
+    with STATE_FILE.open("w", encoding="utf-8") as handle:
+        json.dump(state, handle, indent=2)
+        
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
 
 WEIGHTS = {
