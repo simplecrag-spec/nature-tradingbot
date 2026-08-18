@@ -304,8 +304,66 @@ def load_stock_universe() -> list[dict[str, str]]:
 
 
 def choose_stock(
-    stocks: list[dict[str, str]], score: float
+    stocks: list[dict[str, str]],
+    score: float,
+    last_ticker: str | None = None,
 ) -> dict[str, Any]:
+
+    candidates = []
+
+    for stock in stocks:
+        nn = natural_number(stock["ticker"])
+
+        compatibility = round(
+            100.0 - abs(nn - score), 2
+        )
+
+        final = round(
+            0.5 * score + 0.5 * compatibility, 2
+        )
+
+        candidates.append(
+            (final, compatibility, nn, stock)
+        )
+
+    candidates.sort(
+        key=lambda x: (
+            -x[0],
+            -x[1],
+            x[3]["ticker"],
+            x[3]["exchange"],
+        )
+    )
+
+    # If we have a previous selection,
+    # remove it so we choose the next-best option.
+    if last_ticker:
+        next_candidates = [
+            item for item in candidates
+            if item[3]["ticker"] != last_ticker
+        ]
+
+        if next_candidates:
+            candidates = next_candidates
+
+    final, compatibility, nn, stock = candidates[0]
+
+    signal = (
+        "BUY"
+        if final >= 80
+        else "WATCH"
+        if final >= 65
+        else "SELL"
+    )
+
+    return {
+        "stock": stock,
+        "natural_number": nn,
+        "compatibility": compatibility,
+        "final_score": final,
+        "signal": signal,
+    }
+    
     candidates = []
 
     for stock in stocks:
