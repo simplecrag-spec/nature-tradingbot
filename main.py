@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 import math
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -334,6 +334,54 @@ def choose_stock(
     }
 
 
+# ---------------- POSITION PLAN (allocation / holding period / timing) ----------------
+#
+# EXPERIMENTAL, PAPER-TRADING-ONLY. This deterministically extends the
+# scoring above into "how much, for how long, starting when" -- it has the
+# same status as the rest of the engine's math: illustrative, not a
+# validated sizing or risk-management method. See README.md. If this bot
+# is ever pointed at a real funded account, this layer should be replaced
+# with real position-sizing and risk management, not tuned harder.
+
+
+ALLOCATION_PCT_RANGE = (1.0, 8.0)      # % of a hypothetical paper portfolio
+HOLDING_PERIOD_DAYS_RANGE = (3.0, 21.0)
+BUY_THRESHOLD = 80.0                    # matches the signal threshold above
+
+
+def plan_position(final_score: float, compatibility: float, signal: str, generated_at: datetime) -> dict[str, Any]:
+    if signal != "BUY":
+        allocation_pct = 0.0
+    else:
+        # final_score is already >= BUY_THRESHOLD here. Map
+        # [BUY_THRESHOLD, 100] -> ALLOCATION_PCT_RANGE, higher conviction
+        # gets a (still small, capped) larger slice.
+        span = 100.0 - BUY_THRESHOLD
+        progress = (final_score - BUY_THRESHOLD) / span if span else 0.0
+        low, high = ALLOCATION_PCT_RANGE
+        allocation_pct = round(clamp(low + progress * (high - low), low, high), 2)
+
+    # Holding period: higher compatibility (closer match between the day's
+    # nature score and the ticker's natural number, in this engine's own
+    # terms) is treated as higher conviction -> shorter target hold.
+    # Lower compatibility -> longer hold. Purely illustrative, like
+    # everything else compatibility feeds into.
+    low_days, high_days = HOLDING_PERIOD_DAYS_RANGE
+    holding_period_days = round(
+        clamp(high_days - (compatibility / 100.0) * (high_days - low_days), low_days, high_days),
+        1,
+    )
+
+    exit_by = generated_at + timedelta(days=holding_period_days)
+
+    return {
+        "allocation_pct": allocation_pct,
+        "holding_period_days": holding_period_days,
+        "entered_at": generated_at.isoformat(),
+        "exit_by": exit_by.isoformat(),
+    }
+
+
 def run_engine() -> dict[str, Any]:
     now = datetime.now(timezone.utc)
 
@@ -349,10 +397,17 @@ def run_engine() -> dict[str, Any]:
     stocks = load_stock_universe()
     selection = choose_stock(stocks, score)
 
+    # 4. Then the paper-trading position plan (see note above).
+    position = plan_position(
+        selection["final_score"], selection["compatibility"], selection["signal"], now
+    )
+
     return {
         "city": city,
         "nature_score": score,
+        "universe_size": len(stocks),
         **selection,
+        "position": position,
     }
 
 
@@ -362,6 +417,7 @@ def main() -> int:
 
         city = result["city"]
         stock = result["stock"]
+        position = result["position"]
 
         print("🌍 NATURE TRADING BOT")
         print()
@@ -372,6 +428,10 @@ def main() -> int:
         print(
             f"Live Nature Score: "
             f"{result['nature_score']:.2f}"
+        )
+        print(
+            f"Universe Size: "
+            f"{result['universe_size']} candidates"
         )
         print()
         print(
@@ -401,6 +461,15 @@ def main() -> int:
         print(
             f"Signal: {icon} {result['signal']}"
         )
+        print()
+        print("--- Paper position plan (experimental, not investment advice) ---")
+        if position["allocation_pct"] > 0:
+            print(f"Suggested allocation: {position['allocation_pct']:.2f}% of paper portfolio")
+            print(f"Target holding period: {position['holding_period_days']:.1f} days")
+            print(f"Entered at: {position['entered_at']}")
+            print(f"Target exit by: {position['exit_by']}")
+        else:
+            print("No position sized -- signal is not BUY.")
 
         return 0
 
