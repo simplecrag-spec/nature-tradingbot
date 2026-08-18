@@ -1,0 +1,88 @@
+ticker,name,country,exchange
+AAPL,Apple,USA,NASDAQ
+MSFT,Microsoft,USA,NASDAQ
+NVDA,NVIDIA,USA,NASDAQ
+AMZN,Amazon,USA,NASDAQ
+GOOGL,Alphabet,USA,NASDAQ
+META,Meta Platforms,USA,NASDAQ
+TSLA,Tesla,USA,NASDAQ
+AVGO,Broadcom,USA,NASDAQ
+JPM,JPMorgan Chase,USA,NYSE
+V,Visa,USA,NYSE
+MA,Mastercard,USA,NYSE
+WMT,Walmart,USA,NYSE
+XOM,Exxon Mobil,USA,NYSE
+CVX,Chevron,USA,NYSE
+JNJ,Johnson & Johnson,USA,NYSE
+PG,Procter & Gamble,USA,NYSE
+KO,Coca-Cola,USA,NYSE
+PEP,PepsiCo,USA,NASDAQ
+ORCL,Oracle,USA,NYSE
+CRM,Salesforce,USA,NYSE
+RELIANCE,Reliance Industries,India,NSE
+TCS,Tata Consultancy Services,India,NSE
+HDFCBANK,HDFC Bank,India,NSE
+INFY,Infosys,India,NSE
+ICICIBANK,ICICI Bank,India,NSE
+SBIN,State Bank of India,India,NSE
+BHARTIARTL,Bharti Airtel,India,NSE
+ITC,ITC,India,NSE
+LT,Larsen & Toubro,India,NSE
+HINDUNILVR,Hindustan Unilever,India,NSE
+7203,Toyota Motor,Japan,TSE
+6758,Sony Group,Japan,TSE
+9984,SoftBank Group,Japan,TSE
+6861,Keyence,Japan,TSE
+8035,Tokyo Electron,Japan,TSE
+SAP,SAP,Germany,XETRA
+SIE,Siemens,Germany,XETRA
+ALV,Allianz,Germany,XETRA
+VOW3,Volkswagen,Germany,XETRA
+BMW,BMW,Germany,XETRA
+DTE,Deutsche Telekom,Germany,XETRA
+NESN,Nestle,Switzerland,SIX
+NOVN,Novartis,Switzerland,SIX
+ROG,Roche,Switzerland,SIX
+HSBA,HSBC,UK,LSE
+SHEL,Shell,UK,LSE
+AZN,AstraZeneca,UK,LSE
+ULVR,Unilever,UK,LSE
+BP,BP,UK,LSE
+RIO,Rio Tinto,UK,LSE
+BHP,BHP Group,Australia,ASX
+CBA,Commonwealth Bank,Australia,ASX
+CSL,CSL,Australia,ASX
+WBC,Westpac,Australia,ASX
+ANZ,ANZ Group,Australia,ASX
+VALE3,Vale,Brazil,B3
+PETR4,Petrobras,Brazil,B3
+ITUB4,Itau Unibanco,Brazil,B3
+BBDC4,Banco Bradesco,Brazil,B3
+ABEV3,Ambev,Brazil,B3
+005930,Samsung Electronics,South Korea,KRX
+000660,SK Hynix,South Korea,KRX
+035420,NAVER,South Korea,KRX
+035720,Kakao,South Korea,KRX
+0700,Tencent,China,HKEX
+9988,Alibaba,China,HKEX
+3690,Meituan,China,HKEX
+1299,AIA Group,Hong Kong,HKEX
+1398,ICBC,China,HKEX
+1211,BYD,China,HKEX
+1810,Xiaomi,China,HKEX
+MC,LVMH,France,EURONEXT
+OR,L'Oreal,France,EURONEXT
+TTE,TotalEnergies,France,EURONEXT
+AIR,Airbus,France,EURONEXT
+SAN,Sanofi,France,EURONEXT
+ENEL,Enel,Italy,MIL
+ENI,Eni,Italy,MIL
+ISP,Intesa Sanpaolo,Italy,MIL
+IBE,Iberdrola,Spain,BME
+SAN,Banco Santander,Spain,BME
+ITX,Inditex,Spain,BME
+NOKIA,Nokia,Finland,HEL
+ERIC,Ericsson,Sweden,STO
+VOLV-B,Volvo,Sweden,STO
+EQNR,Equinor,Norway,OSL
+MAERSK-B,A.P. Moller - Maersk,Denmark,CPH
