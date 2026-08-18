@@ -3,7 +3,8 @@ name: Nature Trading Bot
 on:
   workflow_dispatch:
   schedule:
-    # Every 6 hours, UTC. We will tune this after the first successful test.
+    # Every 6 hours, UTC. Reads the cached data/stocks.csv -- it does not
+    # rebuild the universe itself. See update-universe.yml for that.
     - cron: "17 */6 * * *"
 
 permissions:
@@ -27,6 +28,4 @@ jobs:
         run: python -m pip install -r requirements.txt
 
       - name: Run Nature engine
-        env:
-          OPENFIGI_API_KEY: ${{ secrets.OPENFIGI_API_KEY }}
         run: python main.py
